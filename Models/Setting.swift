@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Setting {
+struct Setting: Codable {
     let name: String
     let image: String
 }

@@ -10,6 +10,8 @@ import UIKit
 class LoginController: UIViewController {
     static var user_id = 1
     
+    static var loggedIn = false
+    
     private let titleLabel = UILabel()
     
     private let usernameText = UITextField()
@@ -65,7 +67,7 @@ class LoginController: UIViewController {
         
         NSLayoutConstraint.activate([
             usernameText.topAnchor
-                .constraint(equalTo: titleLabel.bottomAnchor),
+                .constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
             usernameText.centerXAnchor
                 .constraint(equalTo: view.centerXAnchor),
             usernameText.widthAnchor.constraint(equalToConstant: 200),
@@ -87,7 +89,7 @@ class LoginController: UIViewController {
         
         NSLayoutConstraint.activate([
             passwordText.topAnchor
-                .constraint(equalTo: usernameText.bottomAnchor),
+                .constraint(equalTo: usernameText.bottomAnchor, constant: 24),
             passwordText.centerXAnchor
                 .constraint(equalTo: view.centerXAnchor),
             passwordText.widthAnchor.constraint(equalToConstant: 200),
@@ -107,7 +109,7 @@ class LoginController: UIViewController {
         
         NSLayoutConstraint.activate([
             loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loginButton.topAnchor.constraint(equalTo: passwordText.bottomAnchor),
+            loginButton.topAnchor.constraint(equalTo: passwordText.bottomAnchor, constant: 24),
             loginButton.widthAnchor.constraint(equalToConstant: 200),
             loginButton.heightAnchor.constraint(equalToConstant: 40)
         ])
@@ -140,20 +142,15 @@ class LoginController: UIViewController {
     @objc private func pushHomeVC() {
         NetworkManager.shared.login(username: usernameText.text ?? "", password: passwordText.text ?? "") { [weak self] user in
                 guard let self = self else { return }
-                LoginController.user_id = user.id
-                print(LoginController.user_id)
-                DispatchQueue.main.async {
-                    // Perform UI updates such as...
-                    let homeController = HomeController()
-                    homeController.navigationItem.setHidesBackButton(true, animated: true)
-                    self.navigationController?.pushViewController(homeController, animated: true)
-                }
+            LoginController.user_id = user.id
+            DispatchQueue.main.async {
+                // Perform UI updates such as...
+                let homeController = HomeController()
+                homeController.navigationItem.setHidesBackButton(true, animated: true)
+                self.navigationController?.pushViewController(homeController, animated: true)
+            }
         }
-        // TODO: display an error message
-        setupErrorMessage()
     }
-    
-    
     
 }
 

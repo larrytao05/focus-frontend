@@ -7,19 +7,15 @@
 
 import UIKit
 
-class SettingsController: UIViewController {
+class AchievementsController: UIViewController {
     
     private let titleLabel = UILabel()
     
     private let tableView = UITableView()
     
-    private var settings : [Setting] = [
-        Setting(name: "My Character", image: "ninja"),
-        Setting(name: "History", image: "clock"),
-        Setting(name: "Friends", image: "friend"),
-        Setting(name: "Achievements", image: "achievement"),
-        Setting(name: "Settings", image: "settings"),
-        Setting(name: "Log out", image: "logout")
+    private var achievements : [Achievement] = [
+        Achievement(name: "Log in", completed: false),
+        Achievement(name: "Reach level 1", completed: false)
     ]
     
     
@@ -49,7 +45,7 @@ class SettingsController: UIViewController {
     }
     
     private func setupTableView() {
-        tableView.register(SettingTableViewCell.self, forCellReuseIdentifier: SettingTableViewCell.reuse)
+        tableView.register(AchievementTableViewCell.self, forCellReuseIdentifier: AchievementTableViewCell.reuse)
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -57,7 +53,7 @@ class SettingsController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -65,30 +61,13 @@ class SettingsController: UIViewController {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            let characterController = CharacterController()
-            navigationController?.pushViewController(characterController, animated: true)
-        } else if indexPath.row == settings.count - 1 {
-            let startController = StartController()
-            startController.navigationItem.setHidesBackButton(true, animated: true)
-            navigationController?.pushViewController(startController, animated: true)
-        } else if indexPath.row == 1 {
-            let historyController = HistoryController()
-            navigationController?.pushViewController(historyController, animated: true)
-        } else if indexPath.row == 3 {
-            let achievementsController = AchievementsController()
-            navigationController?.pushViewController(achievementsController, animated: true)
-        } else if indexPath.row == 2 {
-            let friendController = FriendController()
-            navigationController?.pushViewController(friendController, animated: true)
-        }
     }
     
 }
 
 // MARK: - UITableView Delegate
 
-extension SettingsController: UITableViewDelegate {
+extension AchievementsController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
@@ -96,15 +75,15 @@ extension SettingsController: UITableViewDelegate {
 
 // MARK: - UITableView DataSource
 
-extension SettingsController: UITableViewDataSource {
+extension AchievementsController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return settings.count
+        return achievements.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCell.reuse, for: indexPath) as? SettingTableViewCell {
-            let data = settings[indexPath.row]
-            cell.configure(name: data.name, image: data.image)
+        if let cell = tableView.dequeueReusableCell(withIdentifier: AchievementTableViewCell.reuse, for: indexPath) as? AchievementTableViewCell {
+            let data = achievements[indexPath.row]
+            cell.configure(name: data.name, completed: data.completed)
             return cell
         }
         return UITableViewCell()

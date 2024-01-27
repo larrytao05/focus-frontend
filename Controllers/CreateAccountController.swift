@@ -8,6 +8,7 @@
 import UIKit
 
 class CreateAccountController: UIViewController {
+    
     private let titleLabel = UILabel()
     
     private let usernameText = UITextField()
@@ -177,7 +178,5 @@ class CreateAccountController: UIViewController {
                 self.navigationController?.pushViewController(loginController, animated: true)
             }
         }
-        // TODO: display an error message
-        
     }
 }

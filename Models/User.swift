@@ -15,6 +15,8 @@ struct User: Codable {
     var time: Float
     var lvl: Int
     var sessions: [Session]
+    //var friends: [User]
+    //var requests: [Setting]
 }
 
 struct UserResponse: Codable {

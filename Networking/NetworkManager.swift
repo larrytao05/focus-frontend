@@ -156,4 +156,42 @@ class NetworkManager {
                 }
             }
     }
+    
+    func addFriend(sender: String, receiver: String, completion: @escaping (User) -> Void) {
+        let endpoint = "\(devEndpoint)/api/users/friends/\(sender)/\(receiver)/"
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        AF.request(endpoint, method: .post)
+            .validate()
+            .responseDecodable(of: User.self, decoder: decoder) {response in
+                switch  response.result {
+                case .success(let user):
+                    print("Successfully sent friend request")
+                    completion(user)
+                case .failure(let error):
+                    print("Error in NetworkManager.addFriend: \(error)")
+                }
+            }
+    }
+    
+    func acceptFriendRequest(sender: String, receiver: String, completion: @escaping (User) -> Void) {
+        let endpoint = "\(devEndpoint)/api/users/friends/\(receiver)/\(sender)/"
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        AF.request(endpoint, method: .put)
+            .validate()
+            .responseDecodable(of: User.self, decoder: decoder) {response in
+                switch  response.result {
+                case .success(let user):
+                    print("Friend request accepted")
+                    completion(user)
+                case .failure(let error):
+                    print("Error in NetworkManager.acceptFriendRequest: \(error)")
+                }
+            }
+    }
 }
